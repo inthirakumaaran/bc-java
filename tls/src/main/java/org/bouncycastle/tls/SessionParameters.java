@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 
+import org.bouncycastle.MYclass.NegotiatedTokenBinding;
 import org.bouncycastle.tls.crypto.TlsSecret;
 import org.bouncycastle.util.Arrays;
 
@@ -21,6 +22,7 @@ public final class SessionParameters
         private byte[] pskIdentity = null;
         private byte[] srpIdentity = null;
         private byte[] encodedServerExtensions = null;
+        private NegotiatedTokenBinding negotiatedTokenBinding=null;
 
         public Builder()
         {
@@ -32,7 +34,12 @@ public final class SessionParameters
             validate(this.compressionAlgorithm >= 0, "compressionAlgorithm");
             validate(this.masterSecret != null, "masterSecret");
             return new SessionParameters(cipherSuite, compressionAlgorithm, localCertificate, masterSecret,
-                negotiatedVersion, peerCertificate, pskIdentity, srpIdentity, encodedServerExtensions);
+                negotiatedVersion, peerCertificate, pskIdentity, srpIdentity, encodedServerExtensions,negotiatedTokenBinding);
+        }
+        public Builder setTokenbinding(NegotiatedTokenBinding negotiatedTokenBinding)
+        {
+            this.negotiatedTokenBinding = negotiatedTokenBinding;
+            return this;
         }
 
         public Builder setCipherSuite(int cipherSuite)
@@ -125,10 +132,11 @@ public final class SessionParameters
     private byte[] pskIdentity = null;
     private byte[] srpIdentity = null;
     private byte[] encodedServerExtensions;
+    private NegotiatedTokenBinding negotiatedTokenBinding=null;
 
     private SessionParameters(int cipherSuite, short compressionAlgorithm, Certificate localCertificate,
         TlsSecret masterSecret, ProtocolVersion negotiatedVersion, Certificate peerCertificate, byte[] pskIdentity,
-        byte[] srpIdentity, byte[] encodedServerExtensions)
+        byte[] srpIdentity, byte[] encodedServerExtensions,NegotiatedTokenBinding negotiatedTokenBinding)
     {
         this.cipherSuite = cipherSuite;
         this.compressionAlgorithm = compressionAlgorithm;
@@ -139,6 +147,7 @@ public final class SessionParameters
         this.pskIdentity = Arrays.clone(pskIdentity);
         this.srpIdentity = Arrays.clone(srpIdentity);
         this.encodedServerExtensions = encodedServerExtensions;
+        this.negotiatedTokenBinding=negotiatedTokenBinding;
     }
 
     public void clear()
@@ -152,7 +161,7 @@ public final class SessionParameters
     public SessionParameters copy()
     {
         return new SessionParameters(cipherSuite, compressionAlgorithm, localCertificate, masterSecret,
-            negotiatedVersion, peerCertificate, pskIdentity, srpIdentity, encodedServerExtensions);
+            negotiatedVersion, peerCertificate, pskIdentity, srpIdentity, encodedServerExtensions,negotiatedTokenBinding);
     }
 
     public int getCipherSuite()
@@ -191,6 +200,14 @@ public final class SessionParameters
     public byte[] getPskIdentity()
     {
         return pskIdentity;
+    }
+
+    public NegotiatedTokenBinding getNegotiatedTokenBinding() {
+        return negotiatedTokenBinding;
+    }
+
+    public void setNegotiatedTokenBinding(NegotiatedTokenBinding negotiatedTokenBinding) {
+        this.negotiatedTokenBinding = negotiatedTokenBinding;
     }
 
     public byte[] getPSKIdentity()

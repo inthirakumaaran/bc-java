@@ -776,6 +776,7 @@ public class TlsClientProtocol
                 sessionServerExtensions, AlertDescription.illegal_parameter);
 
             this.securityParameters.truncatedHMac = TlsExtensionsUtils.hasTruncatedHMacExtension(sessionServerExtensions);
+            this.securityParameters.negotiatedTokenBinding=processTokenBindingExtension(sessionServerExtensions);
 
             /*
              * TODO It's surprising that there's no provision to allow a 'fresh' CertificateStatus to be sent in

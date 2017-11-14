@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.bouncycastle.MYclass.NegotiatedTokenBinding;
+import org.bouncycastle.MYclass.TokenBindingExtension;
 import org.bouncycastle.util.Integers;
 
 public class TlsExtensionsUtils
@@ -23,10 +25,34 @@ public class TlsExtensionsUtils
     public static final Integer EXT_supported_groups = Integers.valueOf(ExtensionType.supported_groups);
     public static final Integer EXT_truncated_hmac = Integers.valueOf(ExtensionType.truncated_hmac);
     public static final Integer EXT_trusted_ca_keys = Integers.valueOf(ExtensionType.trusted_ca_keys);
+    public static final Integer EXT_token_binding = Integers.valueOf(ExtensionType.DRAFT_token_binding);
+
 
     public static Hashtable ensureExtensionsInitialised(Hashtable extensions)
     {
         return extensions == null ? new Hashtable() : extensions;
+    }
+
+    //mychanges
+
+    public static void addTokenBindingExtension(Hashtable extensions, TokenBindingExtension tokenBindingExtension)
+            throws IOException
+    {
+        extensions.put(EXT_token_binding, createTokenBindingExtenson(tokenBindingExtension));
+    }
+
+    private static byte[] createTokenBindingExtenson(TokenBindingExtension tokenBindingExtension)  throws IOException
+    {
+        if (tokenBindingExtension== null)
+        {
+            throw new TlsFatalAlert(AlertDescription.internal_error);
+        }
+
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+
+        tokenBindingExtension.encode(buf);
+
+        return buf.toByteArray();
     }
 
     public static void addClientCertificateTypeExtensionClient(Hashtable extensions, short[] certificateTypes)
@@ -145,6 +171,13 @@ public class TlsExtensionsUtils
     {
         byte[] extensionData = TlsUtils.getExtensionData(extensions, EXT_max_fragment_length);
         return extensionData == null ? -1 : readMaxFragmentLengthExtension(extensionData);
+    }
+
+    public static NegotiatedTokenBinding getTokenBindingExtension(Hashtable extensions)
+            throws IOException
+    {
+        byte[] extensionData = TlsUtils.getExtensionData(extensions, EXT_token_binding);
+        return extensionData == null ? null : readTokenBindingExtension(extensionData);
     }
 
     public static int getPaddingExtension(Hashtable extensions)
@@ -432,6 +465,15 @@ public class TlsExtensionsUtils
         throws IOException
     {
         return TlsUtils.decodeUint8(extensionData);
+    }
+
+    public static NegotiatedTokenBinding readTokenBindingExtension(byte[] extensionData)
+            throws IOException
+    {
+        int[] serverdata =TlsUtils.decodeUint8ArrayWithUint16Length(extensionData);
+        NegotiatedTokenBinding tokenBinding = new NegotiatedTokenBinding();
+        tokenBinding.decode(serverdata);
+        return tokenBinding;
     }
 
     public static int readPaddingExtension(byte[] extensionData)

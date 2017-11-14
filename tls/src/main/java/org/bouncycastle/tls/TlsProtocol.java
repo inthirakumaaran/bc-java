@@ -10,6 +10,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.bouncycastle.MYclass.NegotiatedTokenBinding;
+import org.bouncycastle.MYclass.TokenBindingExtension;
 import org.bouncycastle.tls.crypto.TlsSecret;
 import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.Integers;
@@ -317,6 +319,7 @@ public abstract class TlsProtocol
                     .setSRPIdentity(this.securityParameters.getSRPIdentity())
                     // TODO Consider filtering extensions that aren't relevant to resumed sessions
                     .setServerExtensions(this.serverExtensions)
+                        .setTokenbinding(this.securityParameters.getNegotiatedTokenBinding())
                     .build();
 
                 this.tlsSession = TlsUtils.importSession(this.tlsSession.getSessionID(), this.sessionParameters);
@@ -1182,6 +1185,19 @@ public abstract class TlsProtocol
             }
         }
         return maxFragmentLength;
+    }
+
+    protected NegotiatedTokenBinding processTokenBindingExtension(Hashtable serverExtensions) throws IOException {
+        NegotiatedTokenBinding tokenBinding = TlsExtensionsUtils.getTokenBindingExtension(serverExtensions);
+        if (tokenBinding != null) {
+            if (tokenBinding.getMajorProtocolVerison() > TokenBindingExtension.getMajorProtocolVerison()) {
+                throw new TlsFatalAlert(AlertDescription.unsupported_extension);
+            }
+            if (tokenBinding.getMinorProtocolVerison() > TokenBindingExtension.getMinorProtocolVerison()) {
+                throw new TlsFatalAlert(AlertDescription.unsupported_extension);
+            }
+        }
+        return  tokenBinding;
     }
 
     protected void refuseRenegotiation() throws IOException

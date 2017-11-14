@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.bouncycastle.MYclass.TokenBindingExtension;
 import org.bouncycastle.tls.crypto.TlsCipher;
 import org.bouncycastle.tls.crypto.TlsCrypto;
 import org.bouncycastle.tls.crypto.TlsCryptoParameters;
@@ -228,6 +229,9 @@ public abstract class AbstractTlsClient
             TlsExtensionsUtils.addSupportedGroupsExtension(clientExtensions, supportedGroups);
         }
 
+        //my changes
+        TokenBindingExtension tokenBindingExtension =new TokenBindingExtension();
+        TlsExtensionsUtils.addTokenBindingExtension(clientExtensions,tokenBindingExtension);
         return clientExtensions;
     }
 

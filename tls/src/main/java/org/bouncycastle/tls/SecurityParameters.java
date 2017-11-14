@@ -1,5 +1,6 @@
 package org.bouncycastle.tls;
 
+import org.bouncycastle.MYclass.NegotiatedTokenBinding;
 import org.bouncycastle.tls.crypto.TlsSecret;
 
 public class SecurityParameters
@@ -20,11 +21,21 @@ public class SecurityParameters
     boolean encryptThenMAC = false;
     boolean extendedMasterSecret = false;
     boolean truncatedHMac = false;
+    NegotiatedTokenBinding negotiatedTokenBinding =null;
+
+    public NegotiatedTokenBinding getNegotiatedTokenBinding() {
+        return negotiatedTokenBinding;
+    }
+
+    public void setNegotiatedTokenBinding(NegotiatedTokenBinding negotiatedTokenBinding) {
+        this.negotiatedTokenBinding = negotiatedTokenBinding;
+    }
 
     void clear()
     {
         if (this.masterSecret != null)
         {
+
             this.masterSecret.destroy();
             this.masterSecret = null;
         }
