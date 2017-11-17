@@ -180,6 +180,7 @@ abstract class SSLParametersUtil
         final ProvSSLParameters r = new ProvSSLParameters();
         r.setCipherSuites(sslParameters.getCipherSuites());
         r.setProtocols(sslParameters.getProtocols());
+
         // From JDK 1.7
         if (getAlgorithmConstraints != null)
         {

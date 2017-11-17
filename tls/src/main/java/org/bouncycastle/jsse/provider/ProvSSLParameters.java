@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.bouncycastle.MYclass.NegotiatedTokenBinding;
 import org.bouncycastle.jsse.BCSNIMatcher;
 import org.bouncycastle.jsse.BCSNIServerName;
 
@@ -44,6 +45,16 @@ class ProvSSLParameters
     private String[] protocols;
     private boolean needClientAuth;
     private boolean wantClientAuth;
+    private NegotiatedTokenBinding negotiatedTokenBinding;
+
+    public NegotiatedTokenBinding getNegotiatedTokenBinding() {
+        return negotiatedTokenBinding;
+    }
+
+    public void setNegotiatedTokenBinding(NegotiatedTokenBinding negotiatedTokenBinding) {
+        this.negotiatedTokenBinding = negotiatedTokenBinding;
+    }
+
     private Object algorithmConstraints;      // object not introduced till 1.6
     private String endpointIdentificationAlgorithm;
     private boolean useCipherSuitesOrder;

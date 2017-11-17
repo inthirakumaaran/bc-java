@@ -386,6 +386,12 @@ public class TlsClientProtocol
 
                 establishMasterSecret(getContext(), keyExchange);
 
+//                if (this.securityParameters.negotiatedTokenBinding != null && this.securityParameters.masterSecret !=
+//                        null ){
+//                    this.securityParameters.negotiatedTokenBinding.setExportKeyingMaterial(this.tlsClientContext
+//                            .exportKeyingMaterial(ExporterLabel.token_binding,null,32));
+//                }
+
                 recordStream.setPendingConnectionState(getPeer().getCompression(), getPeer().getCipher());
 
                 if (credentialedSigner != null)
