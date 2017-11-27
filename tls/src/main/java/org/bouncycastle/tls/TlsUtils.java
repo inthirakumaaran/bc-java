@@ -450,7 +450,7 @@ public class TlsUtils
         return uints;
     }
 
-    public static int[] decodeUint8ArrayWithUint16Length(byte[] buf) throws IOException
+    public static int[] decodeUint8ArrayWithUint16(byte[] buf) throws IOException
     {
         if (buf == null)
         {

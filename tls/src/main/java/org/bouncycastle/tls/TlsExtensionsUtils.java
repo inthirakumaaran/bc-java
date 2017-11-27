@@ -470,7 +470,7 @@ public class TlsExtensionsUtils
     public static NegotiatedTokenBinding readTokenBindingExtension(byte[] extensionData)
             throws IOException
     {
-        int[] serverdata =TlsUtils.decodeUint8ArrayWithUint16Length(extensionData);
+        int[] serverdata =TlsUtils.decodeUint8ArrayWithUint16(extensionData);
         NegotiatedTokenBinding tokenBinding = new NegotiatedTokenBinding();
         tokenBinding.decode(serverdata);
         return tokenBinding;

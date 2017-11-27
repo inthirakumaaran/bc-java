@@ -1,5 +1,9 @@
 package org.bouncycastle.jsse.provider;
 
+import org.apache.commons.httpclient.ConnectTimeoutException;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -8,8 +12,8 @@ import java.net.UnknownHostException;
 
 import javax.net.ssl.SSLSocketFactory;
 
-class ProvSSLSocketFactory
-    extends SSLSocketFactory
+public class ProvSSLSocketFactory
+    extends SSLSocketFactory implements ProtocolSocketFactory
 {
     protected final ProvSSLContextSpi context;
 
@@ -60,6 +64,10 @@ class ProvSSLSocketFactory
 //        SSLEngine engine = context.engineCreateSSLEngine(host, port);
 //        return new ProvSSLSocket(engine, host, port, localHost, localPort);
         return new ProvSSLSocketDirect(context, context.createContextData(), host, port, localHost, localPort);
+    }
+
+    public Socket createSocket(String host, int port, InetAddress localAddress, int localPort, HttpConnectionParams params) throws IOException, UnknownHostException, ConnectTimeoutException {
+        return new ProvSSLSocketDirect(context, context.createContextData(), host, port, localAddress, localPort);
     }
 
     public Socket createSocket(Socket s, InputStream consumed, boolean autoClose) throws IOException

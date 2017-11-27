@@ -16,7 +16,7 @@ import org.bouncycastle.tls.SessionID;
 import org.bouncycastle.tls.TlsSession;
 import org.bouncycastle.tls.crypto.TlsCrypto;
 
-class ProvSSLSessionContext
+public class ProvSSLSessionContext
     implements SSLSessionContext
 {
     private static final int provSessionCacheSize = PropertyUtils

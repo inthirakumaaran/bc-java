@@ -2,7 +2,7 @@ package org.bouncycastle.tls;
 
 import org.bouncycastle.util.Arrays;
 
-class TlsSessionImpl implements TlsSession
+public class TlsSessionImpl implements TlsSession
 {
     final byte[] sessionID;
     final SessionParameters sessionParameters;

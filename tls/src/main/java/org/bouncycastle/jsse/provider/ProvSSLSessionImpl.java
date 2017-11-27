@@ -23,7 +23,7 @@ import org.bouncycastle.tls.TlsSession;
 import org.bouncycastle.util.Arrays;
 
 // TODO[jsse] Serializable ?
-class ProvSSLSessionImpl
+public class ProvSSLSessionImpl
     implements ProvSSLSession
 {
     static final Constructor<? extends SSLSession> extendedSessionConstructor;
@@ -105,7 +105,7 @@ class ProvSSLSessionImpl
         return exportSession;
     }
 
-    TlsSession getTlsSession()
+    public TlsSession getTlsSession()
     {
         return tlsSession;
     }
